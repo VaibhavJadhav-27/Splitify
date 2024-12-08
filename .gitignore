@@ -1,0 +1,12 @@
+# Global
+node_modules/
+.env
+dist/
+build/
+
+# Backend specific
+Splitify-backend/node_modules/
+Splitify-backend/.env
+
+# Frontend specific
+Splitify-frontend/node_modules/
