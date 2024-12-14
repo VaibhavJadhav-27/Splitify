@@ -9,4 +9,4 @@ Splitify-backend/node_modules/
 Splitify-backend/.env
 
 # Frontend specific
-Splitify-frontend/node_modules/
+splitify/node_modules/
