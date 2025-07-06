@@ -3,12 +3,17 @@ import mongoose, {Schema} from "mongoose";
 const statusSchema = mongoose.Schema({
     status : {
         type: String,
-        required: true
+        required: true,
+        unique: true, // Ensures status uniqueness
     },
     description : {
         type: String,
-        required: true
+        required: true,
+        trim : true, // Removes whitespace
     }
+},
+{
+    timestamps: true // Automatically adds createdAt and updatedAt fields
 });
 
 

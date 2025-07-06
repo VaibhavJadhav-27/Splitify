@@ -2,6 +2,7 @@ import { Users } from "../models/users.model.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import {ApiResponse } from "../utils/ApiResponse.js";
+import { generateToken } from "../utils/token.js";
 
 const registerUser = asyncHandler( async(req, res) => {
     // get user details from frontend
@@ -13,12 +14,12 @@ const registerUser = asyncHandler( async(req, res) => {
 
     const {firstname, lastname, email, phone, password} = req.body
 
-    if ([firstname, lastname, email, phone, password].some((field) => field?.trim() === "")) 
+    if ([firstname, lastname, email, phone].some((field) => field?.trim() === "")) 
     {
         throw new ApiError(400, "All fields are required")
     }
 
-    const userExist =  Users.findOne({
+    const userExist =  await Users.findOne({
         $or : [{email}, {phone}]
     })
 
@@ -30,17 +31,18 @@ const registerUser = asyncHandler( async(req, res) => {
         firstname,
         lastname,
         email,
-        phone,
-        password
+        phone
     });
 
-    const createdUser = await UserCredentials.findById(user._id).select(firstName);
+    const token = generateToken(user._id);
+
+    const createdUser = await Users.findById(user._id).select(firstname);
     if(!createdUser){
         throw new ApiError(500, "Something went wrong while registering the user")
     }
     else{
         return res.status(201).json(
-            new ApiResponse(200, user, "User registered successfully")
+            new ApiResponse(200,{user, token}, "User registered successfully")
         )
     }
 })

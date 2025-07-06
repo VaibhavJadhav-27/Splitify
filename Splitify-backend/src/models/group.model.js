@@ -15,21 +15,16 @@ const groupSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users', // References the User model
       required: true,
-    },
+    }
     // members: [
     //   {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'Users', // References the User model
     //   },
     // ],
-    createdAt: {
-      type: Date,
-      default: Date.now, // Automatically sets the current date
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now, // Automatically sets the current date
-    },
+  },
+  {
+    timestamps: true, // Automatically adds createdAt and updatedAt fields
   });
 
 

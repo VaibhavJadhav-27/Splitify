@@ -29,16 +29,12 @@ const usersSchema = new mongoose.Schema({
       required: true,
       minlength: 8, // Sets minimum password length
       default: 'defaultpassword'
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now, // Automatically sets the current date
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now, // Automatically sets the current date
-    },
-  });
+    }
+  },
+  {
+    timestamps: true, // Automatically adds createdAt and updatedAt fields
+  }
+);
 
 
 export const Users = mongoose.model("Users", usersSchema)
