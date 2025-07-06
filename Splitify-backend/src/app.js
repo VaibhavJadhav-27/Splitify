@@ -1,11 +1,15 @@
 import express from "express"
 import cors from "cors"
+import { apiLimiter } from "./middleware/rateLimiter.js";
 
 
 
 //declaring app
 const app = express()
 app.use(express.json());
+
+//Apply rate limiting middleware
+app.use(apiLimiter);
 
 
 //routes imports
