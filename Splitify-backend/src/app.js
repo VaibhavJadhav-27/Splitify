@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-import { apiLimiter } from "./middleware/rateLimiter.js";
+import { apiLimiter } from "./middleware/rate_limiter.js";
 
 
 
