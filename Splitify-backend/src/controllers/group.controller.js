@@ -20,7 +20,7 @@ debugger;
         throw new ApiError(400, "Group name is required");
     }
 
-    const groupExist =  await Group.findOne({groupName});
+    const groupExist =  await Group.findOne({ groupName: { $eq: groupName } });
 
     if(groupExist){
         throw new ApiError(409, "Group already exists");
