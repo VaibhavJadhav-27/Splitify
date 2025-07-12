@@ -15,13 +15,13 @@ const groupSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users', // References the User model
       required: true,
-    }
-    // members: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Users', // References the User model
-    //   },
-    // ],
+    },
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users', // References the User model// Makes the field mandatory
+      },
+    ],
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
