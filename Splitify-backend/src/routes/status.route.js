@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { addStatus , addStatusList} from "../controllers/status.controller.js";
+import { addStatus , addStatusList, updateStatus} from "../controllers/status.controller.js";
 import {auth} from "../middleware/auth.js";
 
 const router  =  Router()
@@ -9,7 +9,7 @@ const router  =  Router()
 router.route('/addStatus').post(auth, addStatus);
 router.route('/addStatusList').post(auth, addStatusList);
 // router.route('/getStatus').get(auth, getStatus);
-// router.route('/updateStatus/:id').put(auth, updateStatus);
+router.route('/updateStatus').post(auth, updateStatus);
 // router.route('/deleteStatus/:id').delete(auth, deleteStatus);
 
 

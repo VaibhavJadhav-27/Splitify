@@ -19,15 +19,10 @@ const expenseSchema = new Schema({
         type: Schema.Types.ObjectId, // Foreign key referencing User collection
         ref: 'Users',                 // Name of the User model
         required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now, // Automatically sets the current date
-      },
+    }
+},
+{
+    timestamps: true // Automatically adds createdAt and updatedAt fields
 });
 
 

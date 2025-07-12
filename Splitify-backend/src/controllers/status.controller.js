@@ -42,4 +42,28 @@ const addStatusList = asyncHandler(async (req, res) => {
     }
 });
 
-export { addStatus , addStatusList};   
+const updateStatus = asyncHandler(async (req, res) => {
+    const { status, description } = req.body;
+
+    if ([status, description].some((field) => field?.trim() === "")) {
+        throw new ApiError(400, "All fields are required");
+    }
+
+    const statusId = await Status.findOne({ status : status }).select('_id');
+
+    const updatedStatus = await Status.findByIdAndUpdate(
+        statusId,
+        { status, description },
+        { new: true }
+    );
+
+    if (!updatedStatus) {
+        throw new ApiError(404, "Status not found");
+    } else {
+        return res.status(200).json(
+            new ApiResponse(200, updatedStatus, "Status updated successfully")
+        );
+    }
+});
+
+export { addStatus , addStatusList, updateStatus };   
