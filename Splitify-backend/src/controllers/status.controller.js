@@ -53,7 +53,7 @@ const updateStatus = asyncHandler(async (req, res) => {
 
     const updatedStatus = await Status.findByIdAndUpdate(
         statusId,
-        { status, description },
+        { status: { $eq: status }, description: { $eq: description } },
         { new: true }
     );
 
