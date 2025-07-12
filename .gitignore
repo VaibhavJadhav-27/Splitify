@@ -7,6 +7,8 @@ build/
 # Backend specific
 Splitify-backend/node_modules/
 Splitify-backend/.env
+Splitify-backend/src/logs/*.log
+Splitify-backend/src/logs/*.json
 
 # Frontend specific
 splitify/node_modules/
