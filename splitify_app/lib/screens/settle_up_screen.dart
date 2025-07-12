@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splitify_app/constants/app_strings.dart';
 
 class SettleUpScreen extends StatefulWidget {
   const SettleUpScreen({super.key});
@@ -10,12 +11,12 @@ class SettleUpScreen extends StatefulWidget {
 class _SettleUpScreenState extends State<SettleUpScreen> {
   String? _selectedMethod;
 
-  final List<String> _paymentMethods = [
-    'UPI',
-    'Cash',
-    'Bank Transfer',
-    'Other',
-  ];
+  // final List<String> _paymentMethods = [
+  //   'UPI',
+  //   'Cash',
+  //   'Bank Transfer',
+  //   'Other',
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class _SettleUpScreenState extends State<SettleUpScreen> {
             SizedBox(height: size.height * 0.02),
 
             Text(
-              "\₹0",
+              "₹0",
               style: TextStyle(
                 fontSize: size.width * 0.12,
                 fontWeight: FontWeight.bold,
@@ -50,7 +51,7 @@ class _SettleUpScreenState extends State<SettleUpScreen> {
             DropdownButtonFormField<String>(
               value: _selectedMethod,
               items:
-                  _paymentMethods
+                  AppStrings.paymentMethods
                       .map(
                         (method) => DropdownMenuItem(
                           value: method,

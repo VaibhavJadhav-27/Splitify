@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splitify_app/components/group_card.dart';
 
 class GroupsScreen extends StatelessWidget {
   const GroupsScreen({super.key});
@@ -35,35 +36,13 @@ class GroupsScreen extends StatelessWidget {
                 itemCount: groups.length,
                 itemBuilder: (context, index) {
                   final group = groups[index];
-                  return Card(
-                    elevation: 3,
-                    margin: EdgeInsets.symmetric(vertical: size.height * 0.01),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.04,
-                        vertical: size.height * 0.015,
-                      ),
-                      title: Text(
-                        group['name'],
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (group['youOwe'] > 0)
-                            Text("You owe: ₹${group['youOwe']}"),
-                          if (group['youAreOwed'] > 0)
-                            Text("You are owed: ₹${group['youAreOwed']}"),
-                        ],
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios, size: 18),
-                      onTap: () {
-                        // Future group detail screen navigation
-                      },
-                    ),
+                  return GroupCard(
+                    groupName: group["name"],
+                    youOwe: group["youOwe"],
+                    youAreOwed: group["youAreOwed"],
+                    onTap: () {
+                      // Navigate to group detail screen
+                    },
                   );
                 },
               ),

@@ -13,11 +13,11 @@ class DashboardScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text("You owe", style: TextStyle(fontSize: 16)),
-          Text("\₹0.00", style: TextStyle(fontSize: size.width * 0.08)),
+          Text("₹0.00", style: TextStyle(fontSize: size.width * 0.08)),
 
           const SizedBox(height: 10),
           const Text("You are owed", style: TextStyle(fontSize: 16)),
-          Text("\₹0.00", style: TextStyle(fontSize: size.width * 0.08)),
+          Text("₹0.00", style: TextStyle(fontSize: size.width * 0.08)),
 
           const SizedBox(height: 30),
           const Divider(),

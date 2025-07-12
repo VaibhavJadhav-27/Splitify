@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splitify_app/constants/app_theme.dart';
-import 'screens/login_screen.dart';
+import 'package:splitify_app/navigation/routes.dart';
 
 void main() {
   runApp(const SplitifyApp());
@@ -15,7 +15,8 @@ class SplitifyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Splitify',
       theme: AppTheme.lightTheme,
-      home: const LoginScreen(),
+      initialRoute: '/login',
+      routes: appRoutes,
     );
   }
 }

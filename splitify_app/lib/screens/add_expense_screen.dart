@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddExpenseScreen extends StatefulWidget {
-  const AddExpenseScreen({Key? key}) : super(key: key);
+  const AddExpenseScreen({super.key});
 
   @override
   State<AddExpenseScreen> createState() => _AddExpenseScreenState();
@@ -28,7 +28,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   void dispose() {
     _descriptionController.dispose();
     _amountController.dispose();
-    amountControllers.values.forEach((controller) => controller.dispose());
+    for (var controller in amountControllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
