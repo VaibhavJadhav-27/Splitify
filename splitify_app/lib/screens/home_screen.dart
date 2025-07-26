@@ -28,7 +28,61 @@ class _HomeScreenState extends State<HomeScreen> {
     //final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppStrings.appBarTitles[_currentIndex])),
+      appBar: AppBar(
+        title: Text(AppStrings.appBarTitles[_currentIndex]),
+        leading: Builder(
+          builder:
+              (BuildContext innerBuildContext) => IconButton(
+                onPressed: () {
+                  Scaffold.of(innerBuildContext).openDrawer();
+                },
+                icon: const Icon(Icons.menu),
+              ),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.deepPurple),
+              child: Text(
+                "Welcome Vaibhav 👋",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.group),
+              title: const Text(AppStrings.myGroups),
+              onTap: () {
+                // Navigate to Groups Screen
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text(AppStrings.profile),
+              onTap: () {
+                // Navigate to Profile Screen
+                Navigator.pushReplacementNamed(context, '/profile');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text(AppStrings.logout),
+              onTap: () {
+                // Perform logout logic
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text(AppStrings.settings),
+              onTap: () {
+                // Perform logout logic
+              },
+            ),
+          ],
+        ),
+      ),
       body: _screens[_currentIndex],
       bottomNavigationBar: CustomBottomNavbar(
         currentIndex: _currentIndex,

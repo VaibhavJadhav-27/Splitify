@@ -14,4 +14,9 @@ class AppStrings {
   ];
 
   static const String signInWithGoogle = 'Sign in with Google';
+
+  static const String profile = 'Profile';
+  static const String myGroups = 'My Groups';
+  static const String logout = 'Logout';
+  static const String settings = 'Settings';
 }
