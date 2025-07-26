@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:splitify_app/components/common_button.dart';
+import 'package:splitify_app/constants/app_enums.dart';
+import 'package:splitify_app/constants/app_strings.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -64,12 +67,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
+                CommonButton(
+                  label: 'Log in',
                   onPressed: handleLogin,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                  ),
-                  child: const Text('Log in'),
+                  variant: ButtonVariant.primary,
+                  height: 48,
+                  borderRadius: 12,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(child: Divider()),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text("OR"),
+                    ),
+                    Expanded(child: Divider()),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                CommonButton(
+                  label: AppStrings.signInWithGoogle,
+                  onPressed: () {},
+                  icon: Icons.login,
+                  variant: ButtonVariant.secondary,
+                  height: 48,
+                  borderRadius: 12,
                 ),
               ],
             ),

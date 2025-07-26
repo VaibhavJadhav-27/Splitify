@@ -12,4 +12,6 @@ class AppStrings {
     'Add Expense',
     'Settle Up',
   ];
+
+  static const String signInWithGoogle = 'Sign in with Google';
 }
