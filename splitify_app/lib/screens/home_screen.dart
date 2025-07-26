@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.settings),
               title: const Text(AppStrings.settings),
               onTap: () {
-                // Perform logout logic
+                Navigator.pushReplacementNamed(context, '/settings');
               },
             ),
           ],

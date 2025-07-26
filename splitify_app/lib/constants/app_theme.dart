@@ -30,4 +30,18 @@ class AppTheme {
       ),
     ),
   );
+
+  static ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: Colors.teal,
+    scaffoldBackgroundColor: const Color(0xFF121212),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xFF1F1F1F),
+      foregroundColor: Colors.white,
+    ),
+    listTileTheme: const ListTileThemeData(
+      iconColor: Colors.white,
+      textColor: Colors.white,
+    ),
+  );
 }
