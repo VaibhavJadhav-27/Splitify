@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:splitify_app/providers/bottom_nav_provider.dart';
 import '../screens/groups_screen.dart';
 import '../screens/add_expense_screen.dart';
 import '../screens/settle_up_screen.dart';
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     //final size = MediaQuery.of(context).size;
+    final currentIndex = context.watch<BottomNavProvider>().currentIndex;
 
     return Scaffold(
       appBar: AppBar(
@@ -83,12 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: _screens[_currentIndex],
+      body: _screens[currentIndex],
       bottomNavigationBar: CustomBottomNavbar(
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index;
+            context.read<BottomNavProvider>().setIndex(index);
           });
         },
       ),

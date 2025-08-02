@@ -19,4 +19,10 @@ class AppStrings {
   static const String myGroups = 'My Groups';
   static const String logout = 'Logout';
   static const String settings = 'Settings';
+  static const String about = 'About';
+  static const String help = 'Help';
+  static const String privacyPolicy = 'Privacy Policy';
+  static const String termsOfService = 'Terms of Service';
+  static const String contactUs = 'Contact Us';
+  static const String addExpense = 'Add Expense';
 }

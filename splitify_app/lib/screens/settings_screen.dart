@@ -81,6 +81,7 @@ class SettingsScreen extends StatelessWidget {
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(const SnackBar(content: Text('Logged out')));
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
