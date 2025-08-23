@@ -16,8 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
   final List<Widget> _screens = [
     const DashboardScreen(),
     const GroupsScreen(),
@@ -32,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.appBarTitles[_currentIndex]),
+        title: Text(AppStrings.appBarTitles[currentIndex]),
+        centerTitle: true,
         leading: Builder(
           builder:
               (BuildContext innerBuildContext) => IconButton(
@@ -88,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _screens[currentIndex],
       bottomNavigationBar: CustomBottomNavbar(
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         onTap: (index) {
           setState(() {
             context.read<BottomNavProvider>().setIndex(index);

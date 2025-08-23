@@ -2,21 +2,39 @@ import 'package:flutter/material.dart';
 
 class GroupCard extends StatelessWidget {
   final String groupName;
-  final double youOwe;
-  final double youAreOwed;
+  final List<String> members;
+  final double totalAmount;
+  final String lastExpense;
+  final String timeAgo;
+  final double balance;
+  final bool isSettled;
   final VoidCallback onTap;
 
   const GroupCard({
     super.key,
     required this.groupName,
-    required this.youOwe,
-    required this.youAreOwed,
+    required this.members,
+    required this.totalAmount,
+    required this.lastExpense,
+    required this.timeAgo,
+    required this.balance,
+    required this.isSettled,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    Color getBalanceColor() {
+      if (isSettled) return Colors.grey;
+      return balance < 0 ? Colors.red : Colors.green;
+    }
+
+    String getBalanceText() {
+      if (isSettled) return "Settled";
+      return (balance < 0 ? "- ₹" : "+ ₹") + balance.abs().toStringAsFixed(2);
+    }
 
     return Card(
       elevation: 2,
@@ -26,47 +44,88 @@ class GroupCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Left Icon
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: Colors.blue.shade100,
-                child: const Icon(Icons.groups, color: Colors.blue, size: 28),
-              ),
-              const SizedBox(width: 16),
-
-              // Group Info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      groupName,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    groupName,
+                    style: TextStyle(
+                      fontSize: size.width * 0.045,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: getBalanceColor().withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      getBalanceText(),
                       style: TextStyle(
-                        fontSize: size.width * 0.045,
+                        color: getBalanceColor(),
                         fontWeight: FontWeight.w600,
+                        fontSize: size.width * 0.035,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    if (youOwe > 0)
-                      Text(
-                        "You owe: ₹$youOwe",
-                        style: const TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              // Member avatars
+              Row(
+                children: [
+                  const Icon(Icons.group, size: 16, color: Colors.grey),
+                  const SizedBox(width: 6),
+                  Text("${members.length} members"),
+                  const SizedBox(width: 12),
+                  ...members.take(5).map((name) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 4),
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.shade300,
                       ),
-                    if (youAreOwed > 0)
-                      Text(
-                        "You are owed: ₹$youAreOwed",
-                        style: const TextStyle(color: Colors.green),
-                      ),
-                  ],
-                ),
+                      child: Text(name, style: const TextStyle(fontSize: 12)),
+                    );
+                  }).toList(),
+                ],
               ),
 
-              // Right Arrow
-              const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+              const SizedBox(height: 8),
+              Divider(),
+              const SizedBox(height: 8),
+              // Bottom: Total + Last expense
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.attach_money,
+                        size: 16,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 4),
+                      Text("Total: ₹${totalAmount.toStringAsFixed(2)}"),
+                    ],
+                  ),
+                  if (lastExpense.isNotEmpty)
+                    Text(
+                      "$lastExpense • $timeAgo",
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                ],
+              ),
             ],
           ),
         ),

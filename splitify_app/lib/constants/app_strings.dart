@@ -13,6 +13,15 @@ class AppStrings {
     'Settle Up',
   ];
 
+  static List<String> categories = [
+    'Trip ✈️',
+    'Family 👨‍👩‍👧‍👦',
+    'Couple 🥳',
+    'Event 🎟️',
+    'Project 📸',
+    'Other 🍀',
+  ];
+
   static const String signInWithGoogle = 'Sign in with Google';
 
   static const String profile = 'Profile';
@@ -25,4 +34,7 @@ class AppStrings {
   static const String termsOfService = 'Terms of Service';
   static const String contactUs = 'Contact Us';
   static const String addExpense = 'Add Expense';
+  static const String settleUp = 'Settle Up';
+  static const String manageGroups = 'Manage Groups';
+  static const String createNewGroup = 'Create New Group';
 }
