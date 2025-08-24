@@ -13,20 +13,20 @@ const createGroup = asyncHandler( async(req, res) => {
     // create group object - create entry in db
     // check for group creation
     // return res
-    const {groupName, description} = req.body;
+    const {GroupName, Description, GroupType, Image} = req.body;
 
-    logger.info(` [${req.user._id}] :- Creating group with name: ${groupName}`);
+    logger.info(` [${req.user._id}] :- Creating group with name: ${GroupName}`);
 
-    if ([groupName].some((field) => field?.trim() === "")) 
+    if ([GroupName].some((field) => field?.trim() === "")) 
     {
         logger.error(` [${req.user._id}] :- Group name is required`);
         throw new ApiError(400, "Group name is required");
     }
 
-    const groupExist =  await Group.findOne({groupName: groupName.trim()});
+    const groupExist =  await Group.findOne({groupName: GroupName.trim()});
 
     if(groupExist){
-        logger.error(` [${req.user._id}] :- Group already exists with name: ${groupName}`);
+        logger.error(` [${req.user._id}] :- Group already exists with name: ${GroupName}`);
         throw new ApiError(409, "Group already exists");
     }
 
@@ -35,12 +35,20 @@ const createGroup = asyncHandler( async(req, res) => {
         throw new ApiError(404, "User not found");
     }
 
-    const group = await Group.create({
-        groupName,
-        description,
+    const groupData = {
+        GroupName,
+        Description,
         createdBy: user._id,
+        groupType: GroupType,
         members: []
-    });
+    };
+
+    // Only add groupImage if string is provided
+    if (Image && Image.trim() !== "") {
+    groupData.groupImage = Image.trim();
+    }
+
+    const group = await Group.create(groupData);
 
     if(!group){
         throw new ApiError(500, "Something went wrong while creating the group");

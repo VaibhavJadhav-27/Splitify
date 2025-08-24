@@ -16,6 +16,16 @@ const groupSchema = new mongoose.Schema({
       ref: 'Users', // References the User model
       required: true,
     },
+    groupImage: {
+      type: String,
+      trim: true, // Removes whitespace
+      default: '',
+    }, // Default value is an empty string},
+    groupType: {
+      type: String,
+      required: true,
+      enum: ['Trip', 'Home','Family','Friend', 'Couple', 'Event', 'Others'], // Only allow these values
+    },
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
