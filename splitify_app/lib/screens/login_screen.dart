@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splitify_app/components/common_button.dart';
 import 'package:splitify_app/constants/app_enums.dart';
 import 'package:splitify_app/constants/app_strings.dart';
+import 'package:splitify_app/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void handleLogin() {
+  Future<void> handleLogin() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -32,8 +33,20 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // TODO: Authenticate user here
-    Navigator.pushReplacementNamed(context, '/home');
+    //call login
+    final userData = await AuthService.loginUser(email);
+    if (userData != null) {
+      print(userData.toString());
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login successful!')));
+      // TODO: Authenticate user here
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed. Please try again.')),
+      );
+    }
   }
 
   @override
