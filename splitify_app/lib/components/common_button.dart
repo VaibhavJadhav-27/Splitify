@@ -23,13 +23,15 @@ class CommonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor, textColor, borderColor;
+    late Color bgColor, textColor, borderColor;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     switch (variant) {
       case ButtonVariant.secondary:
-        bgColor = Colors.white;
-        textColor = Theme.of(context).primaryColor;
-        borderColor = Theme.of(context).primaryColor;
+        bgColor = colorScheme.surface;
+        textColor = colorScheme.primary;
+        borderColor = colorScheme.primary;
         break;
       case ButtonVariant.text:
         bgColor = Colors.transparent;
@@ -37,8 +39,8 @@ class CommonButton extends StatelessWidget {
         borderColor = Colors.transparent;
         break;
       case ButtonVariant.primary:
-        bgColor = Theme.of(context).primaryColor;
-        textColor = Colors.white;
+        bgColor = colorScheme.primary;
+        textColor = colorScheme.onPrimary;
         borderColor = Colors.transparent;
         break;
     }
@@ -57,7 +59,10 @@ class CommonButton extends StatelessWidget {
                 : (icon != null
                     ? Icon(icon, color: textColor)
                     : const SizedBox.shrink()),
-        label: Text(label, style: TextStyle(fontSize: 16, color: textColor)),
+        label: Text(
+          label,
+          style: theme.textTheme.labelLarge?.copyWith(color: textColor),
+        ),
         style: ElevatedButton.styleFrom(
           backgroundColor: bgColor,
           foregroundColor: textColor,

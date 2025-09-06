@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -22,7 +23,19 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  // Email validation regex
+  final RegExp emailRegex = RegExp(
+    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+  );
+
+  // Phone number validation regex (10 digits, can expand as needed)
+  final RegExp phoneRegex = RegExp(r"^[0-9]{10}$");
+
   Future<void> handleLogin() async {
+    if (!_formKey.currentState!.validate()) {
+      return; // show validation errors
+    }
+
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -34,19 +47,20 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     //call login
-    final userData = await AuthService.loginUser(email);
-    if (userData != null) {
-      print(userData.toString());
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Login successful!')));
-      // TODO: Authenticate user here
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login failed. Please try again.')),
-      );
-    }
+    // final userData = await AuthService.loginUser(email);
+    // if (userData != null) {
+    //   print(userData.toString());
+    //   ScaffoldMessenger.of(
+    //     context,
+    //   ).showSnackBar(const SnackBar(content: Text('Login successful!')));
+    //   // TODO: Authenticate user here
+    //   Navigator.pushReplacementNamed(context, '/home');
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Login failed. Please try again.')),
+    //   );
+    // }
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
@@ -56,58 +70,80 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Text(
-                  'LOGIN',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 32),
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email or phone',
-                    border: OutlineInputBorder(),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const Text(
+                    'LOGIN',
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                CommonButton(
-                  label: 'Log in',
-                  onPressed: handleLogin,
-                  variant: ButtonVariant.primary,
-                  height: 48,
-                  borderRadius: 12,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(child: Divider()),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text("OR"),
+                  const SizedBox(height: 32),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email or phone',
+                      border: OutlineInputBorder(),
                     ),
-                    Expanded(child: Divider()),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                CommonButton(
-                  label: AppStrings.signInWithGoogle,
-                  onPressed: () {},
-                  icon: Icons.login,
-                  variant: ButtonVariant.secondary,
-                  height: 48,
-                  borderRadius: 12,
-                ),
-              ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter email or phone';
+                      }
+                      if (!emailRegex.hasMatch(value) &&
+                          !phoneRegex.hasMatch(value)) {
+                        return 'Please enter a valid email or phone number';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CommonButton(
+                    label: 'Log in',
+                    onPressed: handleLogin,
+                    variant: ButtonVariant.primary,
+                    height: 48,
+                    borderRadius: 12,
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(child: Divider()),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text("OR"),
+                      ),
+                      Expanded(child: Divider()),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  CommonButton(
+                    label: AppStrings.signInWithGoogle,
+                    onPressed: () {},
+                    icon: Icons.login,
+                    variant: ButtonVariant.secondary,
+                    height: 48,
+                    borderRadius: 12,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

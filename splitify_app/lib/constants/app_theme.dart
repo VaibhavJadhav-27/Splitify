@@ -43,5 +43,15 @@ class AppTheme {
       iconColor: Colors.white,
       textColor: Colors.white,
     ),
+
+    // 🔑 Add bright button styling
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.tealAccent, // bright color in dark mode
+        foregroundColor: Colors.black, // text/icon color
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+      ),
+    ),
   );
 }

@@ -63,7 +63,7 @@ const loginUser = asyncHandler( async(req, res) => {
     //     throw new ApiError(409, "user does not exists")
     // }
     logger.info(` Attempting to log in user with email: ${emailid}`);
-    const user = await Users.findOne({email: emailid.trim()});
+    const user = await Users.findOne({$or : [{email: emailid.trim()},{phone: emailid.trim()}]});
     logger.info(` [${user._id}] :- User found: ${user}`);
     const token = generateToken(user._id);
     if(!user){
