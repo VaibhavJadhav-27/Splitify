@@ -95,6 +95,10 @@ class GroupsScreen extends StatelessWidget {
                     onTap: () {
                       // Navigate to Group Details Screen
                       // Navigator.push(context, MaterialPageRoute(builder: (context) => GroupDetailsScreen(group)));
+                      Navigator.pushReplacementNamed(
+                        context,
+                        '/viewGroupDetails',
+                      );
                     },
                   );
                 },

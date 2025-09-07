@@ -7,6 +7,7 @@ import 'package:splitify_app/screens/home_screen.dart';
 import 'package:splitify_app/screens/profile_screen.dart';
 import 'package:splitify_app/screens/settings_screen.dart';
 import 'package:splitify_app/screens/settle_up_screen.dart';
+import 'package:splitify_app/screens/view_group_details_screen.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/login': (context) => const LoginScreen(),
@@ -17,5 +18,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/settings': (context) => const SettingsScreen(),
   '/settleUp': (context) => const SettleUpScreen(),
   '/createNewGroup': (context) => const CreateNewGroup(),
-  //'/viewGroupDetails': (context) => const GroupDetailsScreen(),
+  '/viewGroupDetails': (context) => const GroupDetailsScreen(),
 };

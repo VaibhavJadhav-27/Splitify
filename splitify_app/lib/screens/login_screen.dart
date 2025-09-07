@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:splitify_app/components/common_button.dart';
 import 'package:splitify_app/constants/app_enums.dart';
 import 'package:splitify_app/constants/app_strings.dart';
@@ -15,6 +16,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -61,6 +64,44 @@ class _LoginScreenState extends State<LoginScreen> {
     //   );
     // }
     Navigator.pushReplacementNamed(context, '/home');
+  }
+
+  Future<void> _handleGoogleLogin() async {
+    try {
+      setState(() => _isLoading = true);
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+
+      // Initialize if needed
+      await googleSignIn.initialize(
+        clientId: '<YOUR_CLIENT_ID>',
+        serverClientId: '<YOUR_SERVER_CLIENT_ID>',
+      );
+
+      final GoogleSignInAccount? user = await googleSignIn.authenticate();
+
+      if (user != null) {
+        // Send user info to backend
+        final loginResponse = await AuthService.loginUser(user.email);
+        if (loginResponse != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Login successful!')));
+          Navigator.pushReplacementNamed(context, '/home');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login failed on server. Please try again.'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Google Sign-In error: $e')));
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -135,8 +176,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   CommonButton(
-                    label: AppStrings.signInWithGoogle,
-                    onPressed: () {},
+                    label:
+                        _isLoading
+                            ? 'Signing in with Google...'
+                            : AppStrings.signInWithGoogle,
+                    onPressed: () {
+                      _handleGoogleLogin();
+                    },
                     icon: Icons.login,
                     variant: ButtonVariant.secondary,
                     height: 48,
