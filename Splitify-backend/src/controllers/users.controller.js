@@ -12,7 +12,7 @@ const registerUser = asyncHandler( async(req, res) => {
     // create user object - create entry in db
     // check for user creation
     // return res
-
+    
     const {firstname, lastname, email, phone, password} = req.body
 
     if ([firstname, lastname, email, phone].some((field) => field?.trim() === "")) 
@@ -28,7 +28,7 @@ const registerUser = asyncHandler( async(req, res) => {
         throw new ApiError(409, "user already exists")
     }
 
-    const user = Users.create({
+    const user = await Users.create({
         firstname,
         lastname,
         email,
