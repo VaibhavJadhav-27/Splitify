@@ -7,6 +7,9 @@ import { apiLimiter } from "./middleware/rate_limiter.js";
 //declaring app
 const app = express()
 
+// Tell express to trust reverse proxies (like Render, Nginx, etc.)
+app.set("trust proxy", 1); // 1 = trust first proxy (safe default)
+
 //middlewares
 app.use(cors({
   origin: "*",
