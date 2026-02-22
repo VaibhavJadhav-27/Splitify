@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:splitify_app/components/common_button.dart';
 import 'package:splitify_app/constants/app_enums.dart';
 import 'package:splitify_app/constants/app_strings.dart';
@@ -49,56 +50,46 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    //call login
-    // final userData = await AuthService.loginUser(email);
-    // if (userData != null) {
-    //   print(userData.toString());
-    //   ScaffoldMessenger.of(
-    //     context,
-    //   ).showSnackBar(const SnackBar(content: Text('Login successful!')));
-    //   // TODO: Authenticate user here
-    //   Navigator.pushReplacementNamed(context, '/home');
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Login failed. Please try again.')),
-    //   );
-    // }
-    Navigator.pushReplacementNamed(context, '/home');
-  }
+    final authService = context.read<AuthService>();
 
-  Future<void> _handleGoogleLogin() async {
     try {
       setState(() => _isLoading = true);
-      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
-
-      // Initialize if needed
-      await googleSignIn.initialize(
-        clientId: '<YOUR_CLIENT_ID>',
-        serverClientId: '<YOUR_SERVER_CLIENT_ID>',
-      );
-
-      final GoogleSignInAccount? user = await googleSignIn.authenticate();
-
-      if (user != null) {
-        // Send user info to backend
-        final loginResponse = await AuthService.loginUser(user.email);
-        if (loginResponse != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Login successful!')));
-          Navigator.pushReplacementNamed(context, '/home');
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Login failed on server. Please try again.'),
-            ),
-          );
-        }
-      }
+      await authService.signIn(email: email, password: password);
+      Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Google Sign-In error: $e')));
+      ).showSnackBar(SnackBar(content: Text('Login failed: $e')));
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> registerUser() async {
+    if (!_formKey.currentState!.validate()) {
+      return; // show validation errors
+    }
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter email and password')),
+      );
+      return;
+    }
+
+    final authService = context.read<AuthService>();
+
+    try {
+      setState(() => _isLoading = true);
+      await authService.createAccount(email: email, password: password);
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -181,7 +172,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ? 'Signing in with Google...'
                             : AppStrings.signInWithGoogle,
                     onPressed: () {
-                      _handleGoogleLogin();
+                      // Implement Google Sign-In logic here;
+                      registerUser();
                     },
                     icon: Icons.login,
                     variant: ButtonVariant.secondary,

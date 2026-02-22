@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:splitify_app/models/login_response_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class AuthService {
+class AuthService extends ChangeNotifier {
   static const String baseUrl = 'http://127.0.0.1:8000/api/v1/users';
 
   static Future<bool> registerUser(Map<String, String> userData) async {
@@ -46,44 +47,62 @@ class AuthService {
     }
   }
 
-  // Google Sign-In instance
-  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  // Sign in with Google and call backend
-  static Future<LoginResponse?> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? user =
-          await GoogleSignIn.instance.authenticate();
-      if (user == null) return null; // User cancelled
+  User? get currentUser => firebaseAuth.currentUser;
 
-      final GoogleSignInAuthentication auth = await user.authentication;
+  Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
 
-      // Call your backend to login/register the user
-      final url = Uri.parse('$baseUrl/google-login');
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'emailid': user.email,
-          'name': user.displayName,
-          'idToken': auth.idToken,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return LoginResponse.fromJson(data['data']);
-      } else {
-        print('Backend login failed: ${response.body}');
-        return null;
-      }
-    } catch (e) {
-      print('Google Sign-In error: $e');
-      return null;
-    }
+  Future<UserCredential> signIn({
+    required String email,
+    required String password,
+  }) async {
+    final credentails = await firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    notifyListeners();
+    return credentails;
   }
 
-  static Future<void> signOutGoogle() async {
-    await _googleSignIn.signOut();
+  Future<UserCredential> createAccount({
+    required String email,
+    required String password,
+  }) async {
+    final credentails = await firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    notifyListeners();
+    return credentails;
+  }
+
+  Future<void> signOut() async {
+    await firebaseAuth.signOut();
+    notifyListeners();
+  }
+
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    await firebaseAuth.sendPasswordResetEmail(email: email);
+    notifyListeners();
+  }
+
+  Future<void> updateUsername({required String username}) async {
+    await currentUser?.updateDisplayName(username);
+    notifyListeners();
+  }
+
+  Future<void> resetPasswordFomCurrentPassword({
+    required String currentPassword,
+    required String newPassword,
+    required String email,
+  }) async {
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: email,
+      password: currentPassword,
+    );
+    await currentUser!.reauthenticateWithCredential(credential);
+    await currentUser!.updatePassword(newPassword);
+    notifyListeners();
   }
 }
